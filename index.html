@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PennyPal — Budget tracking that stays on your phone</title>
+  <meta name="description" content="PennyPal is a simple, private budget tracker for iPhone. See what's left this month, automate your recurring bills and income, and get clear insights — with all your data stored on your device.">
+  <meta name="theme-color" content="#0b0c14">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PennyPal — Clear insights, smarter decisions">
+  <meta property="og:description" content="A simple, private budget tracker for iPhone. Your financial data never leaves your device.">
+  <meta property="og:image" content="assets/og-image.jpg">
+  <meta name="twitter:card" content="summary">
+  <meta name="apple-itunes-app" content="app-id=6784002881">
+
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b0c14;
+      --bg-2: #11131f;
+      --card: #161927;
+      --card-2: #1c2033;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f4f5fa;
+      --text-2: #a9adc2;
+      --text-3: #737891;
+      --blue: #4d5fef;
+      --blue-light: #6b7bf5;
+      --sky: #7ec8f8;
+      --lavender: #b8a9f5;
+      --coin: #f5a24b;
+      --green: #34d399;
+      --red: #f87171;
+      --radius: 20px;
+      --max: 1120px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.025em; }
+    p { margin: 0; }
+
+    .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    .gradient-text {
+      background: linear-gradient(100deg, var(--blue-light) 0%, var(--sky) 55%, var(--lavender) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sky);
+    }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(11, 12, 20, 0.72);
+      backdrop-filter: saturate(160%) blur(16px);
+      -webkit-backdrop-filter: saturate(160%) blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s;
+    }
+    .nav.scrolled { border-bottom-color: var(--border); }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: -0.02em; }
+    .brand img { width: 34px; height: 34px; border-radius: 9px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; font-size: 15px; font-weight: 500; color: var(--text-2); }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links .btn { padding: 9px 18px; font-size: 14px; }
+
+    /* ── Buttons ─────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 26px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 16px;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      color: #fff;
+      box-shadow: 0 8px 28px rgba(77, 95, 239, 0.45), inset 0 1px 0 rgba(255,255,255,.2);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(77, 95, 239, 0.6), inset 0 1px 0 rgba(255,255,255,.2); }
+    .btn-ghost { color: var(--text); border: 1px solid var(--border); background: rgba(255,255,255,.03); }
+    .btn-ghost:hover { background: rgba(255,255,255,.07); }
+    .btn svg { width: 20px; height: 20px; flex: none; }
+
+    .store-btn { padding: 12px 24px 12px 20px; text-align: left; line-height: 1.15; }
+    .store-btn small { display: block; font-size: 11px; font-weight: 500; opacity: .85; }
+    .store-btn span { font-size: 18px; }
+    .store-btn svg { width: 26px; height: 26px; }
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .hero { position: relative; padding: 88px 0 40px; text-align: center; }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -120px 0 auto 0;
+      height: 760px;
+      background:
+        radial-gradient(520px 380px at 30% 30%, rgba(77, 95, 239, 0.35), transparent 70%),
+        radial-gradient(420px 320px at 72% 22%, rgba(126, 200, 248, 0.18), transparent 70%),
+        radial-gradient(360px 260px at 78% 62%, rgba(245, 162, 75, 0.14), transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .hero-icon {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 28px;
+      border-radius: 22px;
+      box-shadow: 0 18px 50px rgba(77, 95, 239, 0.45), 0 0 0 1px rgba(255,255,255,.08);
+    }
+    .hero h1 { font-size: clamp(40px, 7vw, 76px); font-weight: 800; max-width: 880px; margin: 18px auto 0; }
+    .hero .lede { font-size: clamp(17px, 2.2vw, 20px); color: var(--text-2); max-width: 600px; margin: 22px auto 0; }
+    .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 36px; }
+    .hero-note { margin-top: 18px; font-size: 14px; color: var(--text-3); }
+
+    .phones {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      margin-top: 72px;
+      height: 620px;
+    }
+    .phone {
+      position: relative;
+      width: 270px;
+      aspect-ratio: 1206 / 2622;
+      padding: 9px;
+      border-radius: 46px;
+      background: linear-gradient(145deg, #2a2d3d, #12131c);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.09),
+        0 40px 80px -20px rgba(0,0,0,.8),
+        0 20px 60px -30px rgba(77, 95, 239, .5);
+      flex: none;
+    }
+    .phone img { width: 100%; height: 100%; object-fit: cover; border-radius: 38px; }
+    .phones .phone:nth-child(1) { transform: translate(60px, 40px) rotate(-8deg) scale(.88); z-index: 1; opacity: .9; }
+    .phones .phone:nth-child(2) { z-index: 2; width: 290px; }
+    .phones .phone:nth-child(3) { transform: translate(-60px, 40px) rotate(8deg) scale(.88); z-index: 1; opacity: .9; }
+
+    /* ── Stats strip ─────────────────────────────────────── */
+    .strip { padding: 56px 0 24px; }
+    .strip ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .strip li { background: var(--bg-2); padding: 22px 20px; text-align: center; }
+    .strip strong { display: block; font-size: 17px; font-weight: 700; }
+    .strip span { font-size: 14px; color: var(--text-3); }
+
+    /* ── Sections ────────────────────────────────────────── */
+    section { padding: 110px 0; }
+    .section-head { text-align: center; max-width: 680px; margin: 0 auto 56px; }
+    .section-head h2 { font-size: clamp(32px, 4.6vw, 50px); font-weight: 800; margin-top: 14px; }
+    .section-head p { color: var(--text-2); font-size: 18px; margin-top: 16px; }
+
+    /* Features grid */
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .feature {
+      position: relative;
+      padding: 28px;
+      background: linear-gradient(180deg, var(--card) 0%, var(--bg-2) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: transform .25s ease, border-color .25s ease;
+    }
+    .feature:hover { transform: translateY(-4px); border-color: rgba(107, 123, 245, .35); }
+    .feature .ico {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+      background: rgba(77, 95, 239, .14);
+      color: var(--blue-light);
+    }
+    .feature .ico svg { width: 24px; height: 24px; }
+    .feature h3 { font-size: 19px; font-weight: 700; }
+    .feature p { color: var(--text-2); font-size: 15.5px; margin-top: 8px; }
+    .ico.green { background: rgba(52, 211, 153, .12); color: var(--green); }
+    .ico.coin { background: rgba(245, 162, 75, .13); color: var(--coin); }
+    .ico.sky { background: rgba(126, 200, 248, .12); color: var(--sky); }
+    .ico.lav { background: rgba(184, 169, 245, .13); color: var(--lavender); }
+    .ico.red { background: rgba(248, 113, 113, .12); color: var(--red); }
+
+    /* Spotlight rows */
+    .spotlight { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 72px; }
+    .spotlight + .spotlight { margin-top: 120px; }
+    .spotlight.flip .spot-media { order: 2; }
+    .spot-media { position: relative; display: flex; justify-content: center; }
+    .spot-media::before {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      max-width: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(77, 95, 239, .3), transparent 65%);
+      z-index: 0;
+    }
+    .spot-media.warm::before { background: radial-gradient(circle, rgba(245, 162, 75, .22), transparent 65%); }
+    .spot-media.green::before { background: radial-gradient(circle, rgba(52, 211, 153, .2), transparent 65%); }
+    .spot-media .phone { z-index: 1; width: 280px; }
+    .spot-copy h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 800; margin-top: 14px; }
+    .spot-copy > p { color: var(--text-2); font-size: 18px; margin-top: 18px; }
+    .checks { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 14px; }
+    .checks li { display: flex; gap: 12px; align-items: flex-start; color: var(--text-2); font-size: 16px; }
+    .checks li strong { color: var(--text); font-weight: 600; }
+    .checks svg { flex: none; width: 22px; height: 22px; margin-top: 2px; color: var(--green); }
+
+    /* Privacy band */
+    .privacy {
+      position: relative;
+      overflow: hidden;
+      padding: 64px;
+      border-radius: 32px;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(600px 300px at 0% 0%, rgba(77, 95, 239, .28), transparent 70%),
+        radial-gradient(500px 280px at 100% 100%, rgba(52, 211, 153, .14), transparent 70%),
+        var(--bg-2);
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .privacy h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 800; margin-top: 14px; }
+    .privacy p { color: var(--text-2); font-size: 18px; margin-top: 16px; }
+    .privacy-points { display: grid; gap: 14px; }
+    .privacy-point {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 16px 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 15.5px;
+    }
+    .privacy-point .ico { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; flex: none; }
+    .privacy-point svg { width: 20px; height: 20px; }
+
+    /* Pricing */
+    .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 860px; margin: 0 auto; }
+    .plan {
+      padding: 36px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+    .plan.pro {
+      position: relative;
+      background:
+        radial-gradient(400px 220px at 100% 0%, rgba(245, 162, 75, .16), transparent 70%),
+        linear-gradient(180deg, #1a1e36 0%, var(--bg-2) 100%);
+      border-color: rgba(107, 123, 245, .4);
+      box-shadow: 0 30px 80px -40px rgba(77, 95, 239, .6);
+    }
+    .plan-tag {
+      display: inline-block;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: var(--text-2);
+    }
+    .plan.pro .plan-tag { background: linear-gradient(135deg, var(--coin), #f3c06b); color: #2a1a05; }
+    .plan h3 { font-size: 28px; font-weight: 800; margin-top: 18px; }
+    .plan > p { color: var(--text-2); margin-top: 6px; font-size: 15.5px; }
+    .plan ul { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 13px; }
+    .plan li { display: flex; gap: 12px; font-size: 15.5px; color: var(--text-2); }
+    .plan li svg { flex: none; width: 20px; height: 20px; margin-top: 3px; color: var(--blue-light); }
+    .plan.pro li svg { color: var(--coin); }
+    .plan li strong { color: var(--text); font-weight: 600; }
+
+    /* Final CTA */
+    .cta { text-align: center; padding: 120px 0 130px; position: relative; }
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(600px 320px at 50% 60%, rgba(77, 95, 239, .3), transparent 70%);
+      z-index: -1;
+    }
+    .cta img { width: 84px; height: 84px; border-radius: 20px; margin: 0 auto 28px; box-shadow: 0 16px 44px rgba(77,95,239,.45); }
+    .cta h2 { font-size: clamp(34px, 5vw, 58px); font-weight: 800; }
+    .cta p { color: var(--text-2); font-size: 19px; margin: 18px auto 0; max-width: 520px; }
+    .cta .hero-ctas { margin-top: 34px; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 36px 0 44px; color: var(--text-3); font-size: 14px; }
+    footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+    footer nav { display: flex; gap: 24px; flex-wrap: wrap; }
+    footer a:hover { color: var(--text); }
+    footer .brand { font-size: 16px; color: var(--text-2); }
+    footer .brand img { width: 26px; height: 26px; border-radius: 7px; }
+
+    /* Reveal on scroll (only when JS is running) */
+    .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+    .js .reveal.in { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .phones .phone:nth-child(2) { animation: float 6s ease-in-out infinite; }
+      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .js .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .features { grid-template-columns: repeat(2, 1fr); }
+      .spotlight, .spotlight.flip { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+      .spotlight.flip .spot-media { order: 0; }
+      .checks { text-align: left; max-width: 460px; margin-left: auto; margin-right: auto; }
+      .privacy { grid-template-columns: 1fr; padding: 44px 32px; }
+      .strip ul { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      body { font-size: 16px; }
+      .wrap { padding: 0 16px; }
+      .nav-links a:not(.btn) { display: none; }
+      .hero { padding-top: 56px; }
+      .phones { height: auto; margin-top: 56px; }
+      .phone { width: 200px; border-radius: 36px; padding: 7px; }
+      .phone img { border-radius: 30px; }
+      .phones .phone:nth-child(2) { width: 220px; }
+      .phones .phone:nth-child(1) { transform: translate(70px, 30px) rotate(-8deg) scale(.82); }
+      .phones .phone:nth-child(3) { transform: translate(-70px, 30px) rotate(8deg) scale(.82); }
+      section { padding: 80px 0; }
+      .features { grid-template-columns: 1fr; }
+      .spotlight + .spotlight { margin-top: 88px; }
+      .spot-media .phone { width: 230px; }
+      .plans { grid-template-columns: 1fr; }
+      .plan { padding: 28px 24px; }
+      .privacy { padding: 36px 22px; border-radius: 24px; }
+      footer .wrap { flex-direction: column; text-align: center; }
+      footer nav { justify-content: center; }
+    }
+    @media (max-width: 420px) {
+      .phones .phone:nth-child(1), .phones .phone:nth-child(3) { display: none; }
+      .strip ul { grid-template-columns: 1fr 1fr; }
+      .strip li { padding: 18px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- Reusable icons -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></symbol>
+  </svg>
+
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="PennyPal home">
+        <img src="assets/icon.png" alt="" width="34" height="34">
+        PennyPal
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#features">Features</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#pro">Pro</a>
+        <a class="btn btn-primary" href="https://apps.apple.com/app/id6784002881">Get the app</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <div class="hero">
+      <div class="wrap">
+        <img class="hero-icon" src="assets/icon.png" alt="PennyPal app icon" width="92" height="92">
+        <span class="eyebrow">Budget tracker for iPhone</span>
+        <h1>Clear insights.<br><span class="gradient-text">Smarter decisions.</span></h1>
+        <p class="lede">PennyPal shows you exactly what's left to spend this month, handles your recurring bills and income for you, and keeps every number on your phone.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary store-btn" href="https://apps.apple.com/app/id6784002881">
+            <svg><use href="#i-store"/></svg>
+            <div><small>Download on the</small><span>App Store</span></div>
+          </a>
+          <a class="btn btn-ghost" href="#features">See what's inside</a>
+        </div>
+        <p class="hero-note">Free to download · No account needed</p>
+
+        <div class="phones" aria-hidden="true">
+          <div class="phone"><img src="assets/analytics.jpg" alt="" loading="lazy"></div>
+          <div class="phone"><img src="assets/overview.jpg" alt=""></div>
+          <div class="phone"><img src="assets/recurring.jpg" alt="" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick facts -->
+    <div class="strip">
+      <div class="wrap">
+        <ul class="reveal">
+          <li><strong>On-device</strong><span>Your data stays private</span></li>
+          <li><strong>No sign-up</strong><span>Open it and start</span></li>
+          <li><strong>Any currency</strong><span>Pick yours on day one</span></li>
+          <li><strong>Weekly or monthly</strong><span>Budget your way</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <section id="features">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Everything you need</span>
+          <h2>Money, made <span class="gradient-text">obvious</span></h2>
+          <p>No spreadsheets, no bank logins. Just a fast, beautiful way to see where your money goes.</p>
+        </div>
+
+        <div class="features">
+          <article class="feature reveal">
+            <div class="ico green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <h3>Know if you're on track</h3>
+            <p>See what's left from this month's income at a glance, with a live progress bar and today's snapshot.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="ico coin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></div>
+            <h3>Recurring on autopilot</h3>
+            <p>Add your salary, rent and subscriptions once. PennyPal logs them on schedule and forecasts what's coming.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+            <h3>Insightful analytics</h3>
+            <p>Month-over-month comparisons, biggest changes, category breakdowns and a daily net trend.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="ico sky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+            <h3>Find anything fast</h3>
+            <p>Search every transaction across all months by note, category or amount.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="ico lav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div>
+            <h3>Smart categories</h3>
+            <p>Sensible categories out of the box, with totals per category so you see what really adds up.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="ico red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+            <h3>Log in two taps</h3>
+            <p>Add income or an expense from anywhere in the app — or straight from your Home Screen with Quick Actions.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spotlights -->
+    <section style="padding-top: 20px;">
+      <div class="wrap">
+        <div class="spotlight">
+          <div class="spot-media green reveal">
+            <div class="phone"><img src="assets/overview.jpg" alt="PennyPal overview screen showing $6,054 left from this month's income" loading="lazy"></div>
+          </div>
+          <div class="spot-copy reveal">
+            <span class="eyebrow">Overview</span>
+            <h2>One number that <span class="gradient-text">actually matters</span></h2>
+            <p>Open PennyPal and instantly know how much you have left. No digging through charts to answer the only question you had.</p>
+            <ul class="checks">
+              <li><svg><use href="#i-check"/></svg><span><strong>On Track status</strong> plus alerts when you go over budget</span></li>
+              <li><svg><use href="#i-check"/></svg><span><strong>Today's snapshot</strong> of income, spending and transactions</span></li>
+              <li><svg><use href="#i-check"/></svg><span><strong>Week vs week</strong> and top spending categories</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="spotlight flip">
+          <div class="spot-media warm reveal">
+            <div class="phone"><img src="assets/recurring-detail.jpg" alt="Recurring salary transaction set to repeat monthly" loading="lazy"></div>
+          </div>
+          <div class="spot-copy reveal">
+            <span class="eyebrow">Recurring</span>
+            <h2>Set it once. <span class="gradient-text">Track forever.</span></h2>
+            <p>Your regular money moves — salary, rent, insurance, subscriptions — are logged automatically, right on schedule.</p>
+            <ul class="checks">
+              <li><svg><use href="#i-check"/></svg><span><strong>Flexible schedules</strong> with clear next-run dates</span></li>
+              <li><svg><use href="#i-check"/></svg><span><strong>30-day outlook</strong> of scheduled income and expenses</span></li>
+              <li><svg><use href="#i-check"/></svg><span><strong>Heads-up alerts</strong> the day before a payment is due</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="spotlight">
+          <div class="spot-media reveal">
+            <div class="phone"><img src="assets/insights.jpg" alt="Analytics insights showing positive cashflow and top expense category" loading="lazy"></div>
+          </div>
+          <div class="spot-copy reveal">
+            <span class="eyebrow">Analytics</span>
+            <h2>See the story <span class="gradient-text">behind your spending</span></h2>
+            <p>PennyPal turns your transactions into plain-language takeaways, so you can make better calls next month.</p>
+            <ul class="checks">
+              <li><svg><use href="#i-check"/></svg><span><strong>Month-over-month</strong> income, expenses and net cashflow</span></li>
+              <li><svg><use href="#i-check"/></svg><span><strong>Biggest changes</strong> by category, spotted for you</span></li>
+              <li><svg><use href="#i-check"/></svg><span><strong>Insights</strong> like your busiest day and largest expense</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <section id="privacy" style="padding-top: 40px;">
+      <div class="wrap">
+        <div class="privacy reveal">
+          <div>
+            <span class="eyebrow">Private by design</span>
+            <h2>Your finances stay <span class="gradient-text">on your phone</span></h2>
+            <p>Every transaction, category and budget you enter is stored locally on your device. It's never sent to our servers — we don't have any that hold your financial data.</p>
+          </div>
+          <div class="privacy-points">
+            <div class="privacy-point">
+              <div class="ico green" style="background: rgba(52,211,153,.12); color: var(--green);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+              Stored locally, on device
+            </div>
+            <div class="privacy-point">
+              <div class="ico" style="background: rgba(77,95,239,.16); color: var(--blue-light);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/><path d="M3 3l18 18"/></svg></div>
+              No account or sign-up
+            </div>
+            <div class="privacy-point">
+              <div class="ico" style="background: rgba(245,162,75,.13); color: var(--coin);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18"/><path d="M5 10v9h14v-9"/><path d="M12 3l9 7H3z"/><path d="M4 4l16 16"/></svg></div>
+              No bank connections needed
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pro -->
+    <section id="pro" style="padding-top: 60px;">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Plans</span>
+          <h2>Free to start. <span class="gradient-text">Pro when you're ready.</span></h2>
+          <p>Everything you need to track your money is free. Upgrade to PennyPal Pro to go further.</p>
+        </div>
+
+        <div class="plans">
+          <div class="plan reveal">
+            <span class="plan-tag">Free</span>
+            <h3>PennyPal</h3>
+            <p>All the essentials, no strings.</p>
+            <ul>
+              <li><svg><use href="#i-check"/></svg><span><strong>Unlimited</strong> transactions and categories</span></li>
+              <li><svg><use href="#i-check"/></svg><span>Overview, search and core analytics</span></li>
+              <li><svg><use href="#i-check"/></svg><span>Up to <strong>3 recurring</strong> transactions</span></li>
+              <li><svg><use href="#i-check"/></svg><span>Dark mode, any currency</span></li>
+            </ul>
+          </div>
+          <div class="plan pro reveal">
+            <span class="plan-tag">Pro</span>
+            <h3>PennyPal Pro</h3>
+            <p>For people who want the full picture.</p>
+            <ul>
+              <li><svg><use href="#i-check"/></svg><span><strong>Unlimited</strong> recurring transactions</span></li>
+              <li><svg><use href="#i-check"/></svg><span><strong>Advanced analytics</strong> sections unlocked</span></li>
+              <li><svg><use href="#i-check"/></svg><span><strong>No ads</strong>, anywhere</span></li>
+              <li><svg><use href="#i-check"/></svg><span>Support an independent developer</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <div class="cta">
+      <div class="wrap reveal">
+        <img src="assets/icon.png" alt="" width="84" height="84">
+        <h2>Take control of <span class="gradient-text">every penny</span></h2>
+        <p>Download PennyPal and set up your budget in under a minute.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary store-btn" href="https://apps.apple.com/app/id6784002881">
+            <svg><use href="#i-store"/></svg>
+            <div><small>Download on the</small><span>App Store</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a class="brand" href="#top">
+        <img src="assets/icon.png" alt="" width="26" height="26">
+        PennyPal
+      </a>
+      <nav aria-label="Footer">
+        <a href="policy.html">Privacy Policy</a>
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms of Use</a>
+        <a href="mailto:sarraj.khaireddine@icloud.com">Contact</a>
+      </nav>
+      <span>© <span id="year">2026</span> Khaireddine Sarraj</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const nav = document.getElementById('nav');
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const items = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      items.forEach((el) => io.observe(el));
+    } else {
+      items.forEach((el) => el.classList.add('in'));
+    }
+  </script>
+</body>
+</html>
