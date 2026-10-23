@@ -54,7 +54,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
+    html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
     body {
       margin: 0;
       background: var(--bg);
@@ -181,8 +181,10 @@
       padding: 168px 0 0;
       text-align: center;
       isolation: isolate;
+      /* Phones, cards and glows reach past the edges; never let them widen the page. */
+      overflow-x: clip;
     }
-    .aurora { position: absolute; inset: -10% -20% auto; height: 1100px; z-index: -2; pointer-events: none; overflow: hidden; }
+    .aurora { position: absolute; inset: -10% 0 auto; height: 1100px; z-index: -2; pointer-events: none; overflow: hidden; }
     .aurora span {
       position: absolute;
       border-radius: 50%;
@@ -278,7 +280,7 @@
     .chip small { display: block; font-size: 12px; color: var(--text-2); }
     .chip .amt { margin-left: 8px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .chip-left { left: calc(50% - 470px); top: 150px; }
-    .chip-right { left: calc(50% + 200px); top: 330px; }
+    .chip-right { right: max(16px, calc(50% - 526px)); top: 330px; }
     .chip-coffee { left: calc(50% - 420px); top: 470px; }
     .chip-track { left: calc(50% + 170px); top: 80px; padding: 10px 14px; gap: 8px; color: var(--green); font-weight: 700; font-size: 14px; }
     .chip-track svg { width: 18px; height: 18px; }
@@ -403,8 +405,9 @@
     .search .caret { display: inline-block; width: 2px; height: 18px; background: var(--sky); margin-left: 1px; vertical-align: middle; }
     .search + .rows { margin-top: 10px; }
 
-    .donut { display: flex; align-items: center; gap: 22px; }
-    .donut svg { width: 140px; height: 140px; flex: none; transform: rotate(-90deg); }
+    .donut { display: flex; align-items: center; gap: 18px; }
+    .donut svg { width: clamp(100px, 40%, 140px); height: auto; aspect-ratio: 1; flex: none; transform: rotate(-90deg); }
+    .donut .legend { min-width: 0; }
     .donut circle { fill: none; stroke-width: 16; }
     .legend { display: grid; gap: 8px; font-size: 14px; color: var(--text-2); }
     .legend span { display: flex; align-items: center; gap: 8px; }
@@ -562,8 +565,8 @@
 
     /* ── Responsive ──────────────────────────────────────── */
     @media (max-width: 1020px) {
-      .chip-left, .chip-coffee { left: calc(50% - 380px); }
-      .chip-right { left: calc(50% + 150px); }
+      .chip-left, .chip-coffee { left: max(16px, calc(50% - 380px)); }
+      .chip-right { right: max(16px, calc(50% - 476px)); }
     }
     @media (max-width: 900px) {
       .bento .tile, .tile.wide, .tile.mid { grid-column: span 12; }
@@ -602,6 +605,9 @@
       section { padding: 96px 0; }
       .tile { padding: 22px; min-height: 0; }
       .privacy-panel { padding: 44px 22px; border-radius: 26px; }
+      /* The quick-add menu stacks above the button, like the app's own menu. */
+      .fab-demo { height: auto; padding-top: 140px; }
+      .fab-menu { flex-direction: column; align-items: center; gap: 8px; }
       .plans { grid-template-columns: 1fr; }
       .plan { padding: 28px 24px; }
       footer .wrap { flex-direction: column; text-align: center; }
