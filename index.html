@@ -7,7 +7,6 @@
   <meta name="description" content="PennyPal is a simple, private budget tracker for iPhone. See what's left this month, automate your recurring bills and income, and get clear insights — with all your data stored on your device.">
   <meta name="theme-color" content="#08090f">
 
-  
   <meta property="og:type" content="website">
   <meta property="og:title" content="PennyPal — Clear insights, smarter decisions">
   <meta property="og:description" content="A simple, private budget tracker for iPhone. Your financial data never leaves your device.">
@@ -239,7 +238,6 @@
     .phone {
       position: relative;
       width: 280px;
-      aspect-ratio: 1206 / 2622;
       padding: 9px;
       border-radius: 48px;
       background: linear-gradient(145deg, #2c2f40, #111219);
@@ -249,7 +247,8 @@
         0 50px 100px -30px rgba(0,0,0,.9),
         0 30px 80px -40px rgba(77, 95, 239, .6);
     }
-    .phone img { width: 100%; height: 100%; object-fit: cover; border-radius: 40px; }
+    /* The screen area (not the bezel) carries the screenshot's ratio, so nothing gets cropped. */
+    .phone img { display: block; width: 100%; height: auto; aspect-ratio: 598 / 1300; object-fit: cover; border-radius: 40px; }
     .stage .phone { position: absolute; left: 50%; top: 0; margin-left: -140px; will-change: transform; }
     .stage .phone.p-left  { transform: translate(-230px, 70px) rotate(-9deg) scale(.86); z-index: 1; }
     .stage .phone.p-right { transform: translate(230px, 70px) rotate(9deg) scale(.86); z-index: 1; }
@@ -447,8 +446,8 @@
       filter: blur(10px);
     }
     .story .phone { width: 300px; }
-    .story .screens { position: relative; width: 100%; height: 100%; border-radius: 40px; overflow: hidden; }
-    .story .screens img { position: absolute; inset: 0; border-radius: 0; }
+    .story .screens { position: relative; width: 100%; aspect-ratio: 598 / 1300; border-radius: 40px; overflow: hidden; }
+    .story .screens img { position: absolute; inset: 0; height: 100%; border-radius: 0; }
     .steps { position: relative; }
     .step { max-width: 470px; }
     .step h2 { margin-top: 14px; }
