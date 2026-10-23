@@ -1,0 +1,29 @@
+# PennyPal
+
+> PennyPal is a simple, private budget tracker for iPhone (iOS 17.6 or later). It shows exactly what's left to spend this month, logs recurring bills and income automatically, and turns transactions into clear insights. All financial data is stored locally on the device: no account, no sign-up and no bank connections.
+
+- Website: https://khaireddines.github.io/
+- App Store: https://apps.apple.com/app/id6784002881
+- Developer: Khaireddine Sarraj (independent developer)
+- Contact: sarraj.khaireddine@icloud.com
+- Price: free to download; optional PennyPal Pro upgrade
+- Languages: English, Arabic, Dutch, French, German, Italian, Polish, Spanish, Turkish
+
+## Features
+
+- **Overview**: one number that matters, what's left of your weekly or monthly budget, with On Track status, alerts when you go over budget, today's snapshot, week vs week and top spending categories.
+- **Recurring transactions**: add salary, rent, insurance or subscriptions once; PennyPal logs them automatically on schedule, shows next-run dates and a 30-day outlook, and sends a heads-up the day before a payment is due.
+- **Analytics**: month-over-month income, expenses and net cashflow, the biggest category changes, a daily net trend, and insights like your busiest day and largest expense.
+- **Search**: find any transaction across all months by note, category or amount.
+- **Categories**: sensible defaults out of the box, with totals that show what really adds up.
+- **Quick add**: log income or an expense in two taps from anywhere in the app or from Home Screen Quick Actions.
+- **Any currency**, weekly or monthly budget periods, dark mode.
+
+## Plans
+
+- **PennyPal (free)**: unlimited transactions and categories; overview, search and core analytics; up to 3 recurring transactions; dark mode; any currency.
+- **PennyPal Pro**: unlimited recurring transactions, advanced analytics sections, no ads, and supports an independent developer.
+
+## Privacy
+
+Every transaction, category and budget is stored locally on the user's iPhone and is never sent to PennyPal's servers; there are no servers that hold users' financial data. The free version shows ads via Google AdMob, and in-app purchases are handled by RevenueCat.
